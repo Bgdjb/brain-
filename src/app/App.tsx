@@ -7,12 +7,14 @@ import { StudentsPage } from '../features/students/StudentsPage';
 import { SubjectsPage } from '../features/subjects/SubjectsPage';
 import { FlashcardsPage } from '../features/flashcards/FlashcardsPage';
 import { TasksPage } from '../features/tasks/TasksPage';
+import { PlannerPage } from '../features/planner/PlannerPage';
+import { FocusPage } from '../features/focus/FocusPage';
+import { AnalyticsPage } from '../features/analytics/AnalyticsPage';
 import { SettingsPage } from '../features/common/SettingsPage';
 import { Planned } from '../features/common/Planned';
 
 export function App() {
   const { theme, lang } = useSettings();
-
   useEffect(() => {
     const root = document.documentElement;
     root.lang = lang;
@@ -27,19 +29,16 @@ export function App() {
     return () => mq.removeEventListener('change', apply);
   }, [theme, lang]);
 
-  return (
-    <HashRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="teacher" element={<StudentsPage />} />
-          <Route path="study" element={<SubjectsPage />} />
-          <Route path="cards" element={<FlashcardsPage />} />
-          <Route path="tasks" element={<TasksPage />} />
-          <Route path="settings" element={<SettingsPage />} />
-          <Route path="*" element={<Planned />} />
-        </Route>
-      </Routes>
-    </HashRouter>
-  );
+  return <HashRouter><Routes><Route element={<Layout />}>
+    <Route index element={<Dashboard />} />
+    <Route path="teacher" element={<StudentsPage />} />
+    <Route path="study" element={<SubjectsPage />} />
+    <Route path="cards" element={<FlashcardsPage />} />
+    <Route path="tasks" element={<TasksPage />} />
+    <Route path="planner" element={<PlannerPage />} />
+    <Route path="focus" element={<FocusPage />} />
+    <Route path="analytics" element={<AnalyticsPage />} />
+    <Route path="settings" element={<SettingsPage />} />
+    <Route path="*" element={<Planned />} />
+  </Route></Routes></HashRouter>;
 }
