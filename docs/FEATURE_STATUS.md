@@ -11,7 +11,7 @@ A successful GitHub Actions build confirms TypeScript and Vite production compil
 | Study planner, optional weekly repeat for four weeks | Yes |
 | Focus timer and session history | Yes |
 | Progress analytics | Yes |
-| JSON backup and restore (all current Dexie tables) | Yes |
+| JSON backup and restore (all current Dexie tables) | Yes |\n| Optional AES-GCM encrypted backup and restore (PBKDF2 key derivation) | Yes |
 | Groups and daily attendance statuses | Yes |
 | Exams, subjects, dates, scores | Yes |
 | Income, expenses, categories, balance | Yes |
