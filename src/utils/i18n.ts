@@ -5,6 +5,7 @@ const dict = {
   teacher: { ar: 'الإدارة', en: 'Teacher' },
   study: { ar: 'الدراسة', en: 'Study' },
   cards: { ar: 'البطاقات', en: 'Cards' },
+  tasks: { ar: 'المهام', en: 'Tasks' },
   settings: { ar: 'الإعدادات', en: 'Settings' },
 } as const;
 
