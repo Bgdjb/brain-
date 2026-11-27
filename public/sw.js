@@ -1,7 +1,7 @@
 // Cache the app shell under the GitHub Pages project path.
 const BASE = '/brain-';
-const CACHE = 'memo-shell-v4';
-const SHELL = [`${BASE}/`, `${BASE}/index.html`, `${BASE}/manifest.webmanifest`];
+const CACHE = 'memo-shell-v5';
+const SHELL = [`${BASE}/`, `${BASE}/index.html`, `${BASE}/manifest.json`];
 self.addEventListener('install', (event) => {
  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(SHELL)));
  self.skipWaiting();
