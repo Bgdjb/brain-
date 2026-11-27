@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Home, Users, BookOpen, Layers, Settings } from 'lucide-react';
+import { Home, Users, BookOpen, Layers, Settings, ListTodo } from 'lucide-react';
 import { useT, type Key } from '../utils/i18n';
 
 const items: { to: string; key: Key; icon: typeof Home }[] = [
@@ -7,6 +7,7 @@ const items: { to: string; key: Key; icon: typeof Home }[] = [
   { to: '/teacher', key: 'teacher', icon: Users },
   { to: '/study', key: 'study', icon: BookOpen },
   { to: '/cards', key: 'cards', icon: Layers },
+  { to: '/tasks', key: 'tasks', icon: ListTodo },
   { to: '/settings', key: 'settings', icon: Settings },
 ];
 
