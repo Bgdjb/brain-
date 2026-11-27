@@ -45,20 +45,36 @@ export interface ReviewRecord {
   intervalDays: number;
 }
 
+export interface Task extends Base {
+  title: string;
+  details: string;
+  dueDate: string;
+  priority: 'low' | 'normal' | 'high';
+  completed: boolean;
+}
+
 class MemoDB extends Dexie {
   students!: Table<Student, number>;
   subjects!: Table<Subject, number>;
   flashcards!: Table<Flashcard, number>;
   reviews!: Table<ReviewRecord, number>;
+  tasks!: Table<Task, number>;
 
   constructor() {
     super('memo');
-    // Schema v1. Add new versions below with .upgrade() for safe migrations; never edit v1.
+    // Keep old schemas intact; add safe migrations as new versions.
     this.version(1).stores({
       students: '++id, name, grade, archived, updatedAt',
       subjects: '++id, name, archived, updatedAt',
       flashcards: '++id, subjectId, due, suspended',
       reviews: '++id, cardId, reviewedAt',
+    });
+    this.version(2).stores({
+      students: '++id, name, grade, archived, updatedAt',
+      subjects: '++id, name, archived, updatedAt',
+      flashcards: '++id, subjectId, due, suspended',
+      reviews: '++id, cardId, reviewedAt',
+      tasks: '++id, dueDate, completed, priority, updatedAt',
     });
   }
 }
