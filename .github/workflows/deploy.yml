@@ -26,6 +26,8 @@ jobs:
           node-version: 20
       - name: Install dependencies
         run: npm install
+      - name: Generate PWA icons
+        run: node scripts/generate-icons.mjs
       - name: Build MEMO
         run: npm run build
       - name: Upload built site
