@@ -1,29 +1,30 @@
 # MEMO feature status
-
 Updated: 2026-11-27.
 
-A successful GitHub Actions build confirms TypeScript and Vite production compilation. It does not replace manual browser, mobile, accessibility, or offline testing.
+A successful GitHub Actions build confirms TypeScript and Vite production compilation; it does not replace device QA.
 
-| Feature | Status |
+| Area | Implemented |
 |---|---|
-| React + TypeScript + Vite + hash routing | Implemented; CI build check |
-| Local IndexedDB database with versioned migrations | Implemented; schema v3 |
-| Theme and language direction settings | Implemented; manual QA pending |
-| Students and subject management | Implemented; manual QA pending |
-| Flashcards and spaced repetition | Implemented; manual QA pending |
-| Daily tasks with due date and priority | Implemented; manual QA pending |
-| Study planner linked to subjects | Implemented; manual QA pending |
-| Focus timer and session history | Implemented; manual QA pending |
-| Progress analytics | Implemented; manual QA pending |
-| JSON backup and restore | Implemented; manual QA pending |
-| PWA manifest and runtime asset caching | Implemented; offline behavior must be verified on device |
-| Groups, attendance, exams, finance, advanced performance lab, recurring plans, calendar sync, encrypted vault, AI features, PDF reports | Not implemented |
-| Automated end-to-end browser tests and lint | Not configured |
+| Core app, local IndexedDB, migrations v1-v4 | Yes |
+| Students, subjects, flashcards, spaced repetition | Yes |
+| Daily tasks, overdue backlog filter, priorities | Yes |
+| Study planner, optional weekly repeat for four weeks | Yes |
+| Focus timer and session history | Yes |
+| Progress analytics | Yes |
+| JSON backup and restore (all current Dexie tables) | Yes |
+| Groups and daily attendance statuses | Yes |
+| Exams, subjects, dates, scores | Yes |
+| Income, expenses, categories, balance | Yes |
+| Monthly calendar for tasks, plans and exams | Yes |
+| Printable summary reports; browser print-to-PDF | Yes |
+| PWA install shell and service worker | Present; offline QA required |
+| AI assistant / cloud sync / third-party calendar sync | Not connected; requires external services and credentials |
+| Automated end-to-end tests | Not configured |
 
-## Next work
-1. Verify all new flows on Android, including database migration from v2 to v3.
-2. Test backup/restore using a throwaway backup before relying on it.
-3. Verify offline launch after one successful online visit.
-4. Add backlog workflows, calendar view, exams and assignments.
-5. Add teacher-specific group, attendance and finance tools only if they remain in the product scope.
-6. Add PDF reports and optional encrypted export.
+## Important notes
+- New database tables are added in schema v4; existing tables are preserved by Dexie migration.
+- Backup export iterates over all database tables, so it includes the new tables. Restore replaces local records after explicit confirmation.
+- Reports use the browser print dialog; choose Save as PDF when offered.
+- Attendance is recorded for active students against the selected group and date.
+- Weekly repetition creates four weekly plan entries; it is not an indefinite recurring rule.
+- Verify all new flows on Android, backup/restore with a test copy, and offline launch before relying on them.
