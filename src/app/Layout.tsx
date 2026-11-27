@@ -10,7 +10,7 @@ const items: { to: string; key: Key; icon: typeof Home }[] = [
   { to: '/tasks', key: 'tasks', icon: ListTodo },
   { to: '/planner', key: 'planner', icon: CalendarDays },
   { to: '/focus', key: 'focus', icon: Timer },
-  { to: '/analytics', key: 'analytics', icon: ChartNoAxesCombined },
+  { to: '/analytics', key: 'analytics', icon: BarChart3 },
   { to: '/settings', key: 'settings', icon: Settings },
 ];
 
