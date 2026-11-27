@@ -29,6 +29,19 @@ export interface FocusSession {
   id?: number; label: string; startedAt: number; endedAt: number;
   durationMinutes: number; completed: boolean;
 }
+export interface StudyGroup extends Base { name: string; grade: string; notes: string; }
+export interface AttendanceRecord extends Base {
+  groupId: number; studentId: number; date: string;
+  status: 'present' | 'absent' | 'late' | 'excused'; note: string;
+}
+export interface Exam extends Base {
+  title: string; subjectId: number | null; examDate: string;
+  maxScore: number; score: number | null; notes: string;
+}
+export interface FinanceEntry extends Base {
+  type: 'income' | 'expense'; title: string; category: string;
+  amount: number; entryDate: string; notes: string;
+}
 
 class MemoDB extends Dexie {
   students!: Table<Student, number>;
@@ -38,6 +51,10 @@ class MemoDB extends Dexie {
   tasks!: Table<Task, number>;
   studyPlans!: Table<StudyPlan, number>;
   focusSessions!: Table<FocusSession, number>;
+  groups!: Table<StudyGroup, number>;
+  attendance!: Table<AttendanceRecord, number>;
+  exams!: Table<Exam, number>;
+  finance!: Table<FinanceEntry, number>;
 
   constructor() {
     super('memo');
@@ -62,6 +79,19 @@ class MemoDB extends Dexie {
       tasks: '++id, dueDate, completed, priority, updatedAt',
       studyPlans: '++id, plannedDate, subjectId, completed, updatedAt',
       focusSessions: '++id, startedAt, endedAt, completed',
+    });
+    this.version(4).stores({
+      students: '++id, name, grade, archived, updatedAt',
+      subjects: '++id, name, archived, updatedAt',
+      flashcards: '++id, subjectId, due, suspended',
+      reviews: '++id, cardId, reviewedAt',
+      tasks: '++id, dueDate, completed, priority, updatedAt',
+      studyPlans: '++id, plannedDate, subjectId, completed, updatedAt',
+      focusSessions: '++id, startedAt, endedAt, completed',
+      groups: '++id, name, grade, updatedAt',
+      attendance: '++id, groupId, studentId, date, status, updatedAt, [groupId+date+studentId]',
+      exams: '++id, examDate, subjectId, updatedAt',
+      finance: '++id, type, entryDate, category, updatedAt',
     });
   }
 }
