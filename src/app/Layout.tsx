@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Home, Users, BookOpen, Layers, Settings, ListTodo, CalendarDays, Timer, ChartNoAxesCombined } from 'lucide-react';
+import { Home, Users, BookOpen, Layers, Settings, ListTodo, CalendarDays, Timer, BarChart3 } from 'lucide-react';
 import { useT, type Key } from '../utils/i18n';
 
 const items: { to: string; key: Key; icon: typeof Home }[] = [
