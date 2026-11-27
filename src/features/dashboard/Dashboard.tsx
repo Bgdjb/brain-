@@ -5,12 +5,13 @@ import { db } from '../../database/schema';
 export function Dashboard() {
   const stats = useLiveQuery(async () => {
     const now = Date.now();
-    const [students, subjects, due] = await Promise.all([
+    const [students, subjects, due, tasks] = await Promise.all([
       db.students.filter((s) => !s.archived).count(),
       db.subjects.filter((s) => !s.archived).count(),
       db.flashcards.where('due').belowOrEqual(now).filter((c) => !c.suspended).count(),
+      db.tasks.filter((task) => !task.completed).count(),
     ]);
-    return { students, subjects, due };
+    return { students, subjects, due, tasks };
   });
 
   if (!stats) return <p className="muted">جارٍ التحميل…</p>;
@@ -32,7 +33,12 @@ export function Dashboard() {
           <strong>{stats.due}</strong>
           <span>بطاقات مستحقة للمراجعة</span>
         </Link>
+        <Link className="card stat" to="/tasks">
+          <strong>{stats.tasks}</strong>
+          <span>مهام لم تُنجز</span>
+        </Link>
       </div>
+      <Link className="card" to="/tasks">افتح قائمة المهام اليومية ←</Link>
     </section>
   );
 }
