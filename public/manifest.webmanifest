@@ -3,9 +3,10 @@
   "short_name": "MEMO",
   "lang": "ar",
   "dir": "rtl",
-  "start_url": "/",
+  "start_url": "/brain-/",
+  "scope": "/brain-/",
   "display": "standalone",
   "background_color": "#0b1530",
   "theme_color": "#0b1530",
-  "icons": [{ "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+  "icons": [{ "src": "/brain-/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
 }
