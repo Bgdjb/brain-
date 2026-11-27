@@ -1,26 +1,29 @@
 # MEMO feature status
 
-Last updated: 2026-11-27. Deployment is configured through GitHub Actions. A successful deployment confirms the production build completed, not that every feature has been browser-tested.
+Updated: 2026-11-27.
+
+A successful GitHub Actions build confirms TypeScript and Vite production compilation. It does not replace manual browser, mobile, accessibility, or offline testing.
 
 | Feature | Status |
 |---|---|
-| Vite + React + TypeScript + hash routing | Implemented; production build passed in GitHub Actions |
-| Dexie local database | Implemented; schema v1 plus v2 task-table migration |
-| Dark/light/system theme and RTL/LTR setting | Implemented; browser behavior still needs manual QA |
-| Responsive navigation | Implemented; manual device QA pending |
-| Students: add, search, archive/restore, delete | Implemented; manual QA pending |
-| Subjects: add, archive/restore, delete | Implemented; manual QA pending |
+| React + TypeScript + Vite + hash routing | Implemented; CI build check |
+| Local IndexedDB database with versioned migrations | Implemented; schema v3 |
+| Theme and language direction settings | Implemented; manual QA pending |
+| Students and subject management | Implemented; manual QA pending |
 | Flashcards and spaced repetition | Implemented; manual QA pending |
-| Daily tasks: add, details, due date, priority, complete/reopen, filter, delete | Implemented; manual QA pending |
-| Dashboard counts for students, subjects, due cards, open tasks | Implemented; manual QA pending |
-| PWA manifest and service worker app shell | Implemented; offline behavior not yet verified on device |
-| Groups, attendance, exams, finance, performance analytics, backlog, focus timer, vault, AI, reports, backup/restore | Not implemented yet |
-| Lint and end-to-end browser tests | Not configured |
-| Production PNG app icons | Not configured (SVG currently used) |
+| Daily tasks with due date and priority | Implemented; manual QA pending |
+| Study planner linked to subjects | Implemented; manual QA pending |
+| Focus timer and session history | Implemented; manual QA pending |
+| Progress analytics | Implemented; manual QA pending |
+| JSON backup and restore | Implemented; manual QA pending |
+| PWA manifest and runtime asset caching | Implemented; offline behavior must be verified on device |
+| Groups, attendance, exams, finance, advanced performance lab, recurring plans, calendar sync, encrypted vault, AI features, PDF reports | Not implemented |
+| Automated end-to-end browser tests and lint | Not configured |
 
-## Next milestones
-1. Study planner and backlog.
-2. Focus timer with session history.
-3. Progress analytics and reports.
-4. Backup/export and restore.
-5. Offline/device QA and accessibility pass.
+## Next work
+1. Verify all new flows on Android, including database migration from v2 to v3.
+2. Test backup/restore using a throwaway backup before relying on it.
+3. Verify offline launch after one successful online visit.
+4. Add backlog workflows, calendar view, exams and assignments.
+5. Add teacher-specific group, attendance and finance tools only if they remain in the product scope.
+6. Add PDF reports and optional encrypted export.
