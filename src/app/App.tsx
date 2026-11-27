@@ -6,6 +6,7 @@ import { Dashboard } from '../features/dashboard/Dashboard';
 import { StudentsPage } from '../features/students/StudentsPage';
 import { SubjectsPage } from '../features/subjects/SubjectsPage';
 import { FlashcardsPage } from '../features/flashcards/FlashcardsPage';
+import { TasksPage } from '../features/tasks/TasksPage';
 import { SettingsPage } from '../features/common/SettingsPage';
 import { Planned } from '../features/common/Planned';
 
@@ -34,6 +35,7 @@ export function App() {
           <Route path="teacher" element={<StudentsPage />} />
           <Route path="study" element={<SubjectsPage />} />
           <Route path="cards" element={<FlashcardsPage />} />
+          <Route path="tasks" element={<TasksPage />} />
           <Route path="settings" element={<SettingsPage />} />
           <Route path="*" element={<Planned />} />
         </Route>
