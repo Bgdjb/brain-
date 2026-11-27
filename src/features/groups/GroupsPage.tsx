@@ -1,0 +1,17 @@
+import { useState, type FormEvent } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db, type AttendanceRecord } from '../../database/schema';
+const today = () => new Date().toISOString().slice(0, 10);
+export function GroupsPage() {
+ const [name,setName]=useState(''); const [grade,setGrade]=useState(''); const [notes,setNotes]=useState(''); const [groupId,setGroupId]=useState(''); const [date,setDate]=useState(today());
+ const groups=useLiveQuery(()=>db.groups.orderBy('name').toArray(),[]); const students=useLiveQuery(()=>db.students.filter(s=>!s.archived).toArray(),[]);
+ const records=useLiveQuery(()=>groupId?db.attendance.where('groupId').equals(Number(groupId)).and(r=>r.date===date).toArray():[],[groupId,date]);
+ const addGroup=async(e:FormEvent)=>{e.preventDefault();if(name.trim().length<2)return;const now=Date.now();const id=await db.groups.add({name:name.trim(),grade:grade.trim(),notes:notes.trim(),createdAt:now,updatedAt:now});setGroupId(String(id));setName('');setGrade('');setNotes('');};
+ const setStatus=async(studentId:number,status:AttendanceRecord['status'])=>{if(!groupId)return;const key=[Number(groupId),date,studentId] as [number,string,number];const old=await db.attendance.where('[groupId+date+studentId]').equals(key).first();const now=Date.now();if(old?.id)await db.attendance.update(old.id,{status,updatedAt:now});else await db.attendance.add({groupId:Number(groupId),studentId,date,status,note:'',createdAt:now,updatedAt:now});};
+ const removeGroup=async(id:number)=>{if(!window.confirm('حذف المجموعة وسجلات حضورها؟'))return;await db.transaction('rw',db.groups,db.attendance,async()=>{await db.attendance.where('groupId').equals(id).delete();await db.groups.delete(id);});if(groupId===String(id))setGroupId('');};
+ const labels:Record<AttendanceRecord['status'],string>={present:'حاضر',absent:'غائب',late:'متأخر',excused:'بعذر'};
+ return <section className="stack"><h1>المجموعات والحضور</h1>
+ <form className="card stack" onSubmit={addGroup}><h2>إنشاء مجموعة</h2><label>اسم المجموعة<input value={name} onChange={e=>setName(e.target.value)} required/></label><label>الصف أو المستوى<input value={grade} onChange={e=>setGrade(e.target.value)}/></label><label>ملاحظات<textarea value={notes} onChange={e=>setNotes(e.target.value)} rows={2}/></label><button className="primary">إضافة مجموعة</button></form>
+ <div className="card stack"><h2>تسجيل الحضور</h2><label>المجموعة<select value={groupId} onChange={e=>setGroupId(e.target.value)}><option value="">اختر مجموعة</option>{groups?.map(g=><option key={g.id} value={g.id}>{g.name}</option>)}</select></label><label>التاريخ<input type="date" value={date} onChange={e=>setDate(e.target.value)}/></label>{!students?.length&&<p className="muted">أضف الطلاب أولًا من صفحة الإدارة.</p>}{students?.map(s=>{const r=records?.find(x=>x.studentId===s.id);return <div className="item" key={s.id}><div><strong>{s.name}</strong><div className="muted">{r?labels[r.status]:'لم يُسجل'}</div></div><div className="row wrap">{(['present','absent','late','excused'] as const).map(st=><button key={st} type="button" aria-pressed={r?.status===st} onClick={()=>void setStatus(s.id!,st)}>{labels[st]}</button>)}</div></div>;})}</div>
+ <div className="card stack"><h2>المجموعات المحفوظة</h2>{groups?.map(g=><div className="item" key={g.id}><div><strong>{g.name}</strong><div className="muted">{g.grade||'بدون صف'}</div></div><button className="danger" onClick={()=>void removeGroup(g.id!)}>حذف</button></div>)}</div></section>;
+}
