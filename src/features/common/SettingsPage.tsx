@@ -1,60 +1,9 @@
 import { useRef, useState } from 'react';
 import { useSettings, type Lang, type Theme } from '../../stores/settings';
 import { downloadBackup, restoreBackup } from '../../utils/backup';
-
-export function SettingsPage() {
-  const { theme, lang, setTheme, setLang } = useSettings();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-
-  const importFile = async (file?: File) => {
-    if (!file) return;
-    setMessage(''); setError('');
-    if (!window.confirm('استعادة النسخة ستمسح البيانات الحالية على هذا الجهاز وتستبدلها بمحتويات النسخة. هل أنشأت نسخة احتياطية حديثة وتريد المتابعة؟')) {
-      if (fileRef.current) fileRef.current.value = '';
-      return;
-    }
-    try {
-      await restoreBackup(file);
-      setMessage('تمت استعادة النسخة الاحتياطية. أعد تحميل الصفحة إذا لم تتحدث البيانات.');
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'تعذر استعادة النسخة.');
-    } finally {
-      if (fileRef.current) fileRef.current.value = '';
-    }
-  };
-
-  return (
-    <section className="stack">
-      <h1>الإعدادات</h1>
-      <div className="card stack">
-        <label>المظهر
-          <select value={theme} onChange={(e) => setTheme(e.target.value as Theme)}>
-            <option value="system">حسب النظام</option>
-            <option value="dark">داكن</option>
-            <option value="light">فاتح</option>
-          </select>
-        </label>
-        <label>اللغة والاتجاه
-          <select value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
-            <option value="ar">العربية (RTL)</option>
-            <option value="en">English (LTR)</option>
-          </select>
-        </label>
-        <p className="muted">بياناتك محفوظة محليًا على هذا الجهاز داخل المتصفح.</p>
-      </div>
-      <div className="card stack">
-        <h2>النسخ الاحتياطي</h2>
-        <p className="muted">نزّل ملفًا يحتوي على الطلاب والمواد والبطاقات والمراجعات والمهام والخطط وجلسات التركيز.</p>
-        <button className="primary" onClick={() => void downloadBackup()}>تصدير نسخة احتياطية</button>
-        <label>استعادة من ملف JSON
-          <input ref={fileRef} type="file" accept="application/json,.json" onChange={(e) => void importFile(e.target.files?.[0])} />
-        </label>
-        <p className="muted">تنبيه: الاستعادة تستبدل كل البيانات الحالية على هذا الجهاز. احتفظ بنسخة قبل الاستعادة.</p>
-        {message && <p role="status">{message}</p>}
-        {error && <p role="alert" className="error">{error}</p>}
-      </div>
-    </section>
-  );
+export function SettingsPage(){
+ const {theme,lang,setTheme,setLang}=useSettings();const fileRef=useRef<HTMLInputElement>(null);const [message,setMessage]=useState('');const [error,setError]=useState('');
+ const importFile=async(file?:File)=>{if(!file)return;setMessage('');setError('');if(!window.confirm('استعادة النسخة ستمسح البيانات الحالية على هذا الجهاز وتستبدلها بمحتويات النسخة. هل أنشأت نسخة احتياطية حديثة وتريد المتابعة؟')){if(fileRef.current)fileRef.current.value='';return;}try{await restoreBackup(file);setMessage('تمت استعادة النسخة الاحتياطية. أعد تحميل الصفحة إذا لم تتحدث البيانات.');}catch(e){setError(e instanceof Error?e.message:'تعذر استعادة النسخة.');}finally{if(fileRef.current)fileRef.current.value='';}};
+ return <section className="stack"><h1>الإعدادات</h1><div className="card stack"><label>المظهر<select value={theme} onChange={e=>setTheme(e.target.value as Theme)}><option value="system">حسب النظام</option><option value="dark">داكن</option><option value="light">فاتح</option></select></label><label>اللغة والاتجاه<select value={lang} onChange={e=>setLang(e.target.value as Lang)}><option value="ar">العربية (RTL)</option><option value="en">English (LTR)</option></select></label><p className="muted">بياناتك محفوظة محليًا على هذا الجهاز داخل المتصفح.</p></div>
+ <div className="card stack"><h2>النسخ الاحتياطي</h2><p className="muted">النسخة تشمل الطلاب والمجموعات والحضور والمواد والبطاقات والمراجعات والمهام والخطط وجلسات التركيز والامتحانات والميزانية.</p><button className="primary" onClick={()=>void downloadBackup()}>تصدير نسخة احتياطية</button><label>استعادة من ملف JSON<input ref={fileRef} type="file" accept="application/json,.json" onChange={e=>void importFile(e.target.files?.[0])}/></label><p className="muted">تنبيه: الاستعادة تستبدل كل البيانات الحالية على هذا الجهاز. احتفظ بنسخة قبل الاستعادة.</p>{message&&<p role="status">{message}</p>}{error&&<p role="alert" className="error">{error}</p>}</div></section>;
 }
