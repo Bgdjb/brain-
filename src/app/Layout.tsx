@@ -1,5 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { Home, Users, BookOpen, Layers, Settings, ListTodo } from 'lucide-react';
+import { Home, Users, BookOpen, Layers, Settings, ListTodo, CalendarDays, Timer, ChartNoAxesCombined } from 'lucide-react';
 import { useT, type Key } from '../utils/i18n';
 
 const items: { to: string; key: Key; icon: typeof Home }[] = [
@@ -8,25 +8,21 @@ const items: { to: string; key: Key; icon: typeof Home }[] = [
   { to: '/study', key: 'study', icon: BookOpen },
   { to: '/cards', key: 'cards', icon: Layers },
   { to: '/tasks', key: 'tasks', icon: ListTodo },
+  { to: '/planner', key: 'planner', icon: CalendarDays },
+  { to: '/focus', key: 'focus', icon: Timer },
+  { to: '/analytics', key: 'analytics', icon: ChartNoAxesCombined },
   { to: '/settings', key: 'settings', icon: Settings },
 ];
 
 export function Layout() {
   const t = useT();
-  return (
-    <div className="shell">
-      <nav className="nav" aria-label="Main">
-        <div className="brand">MEMO</div>
-        {items.map(({ to, key, icon: Icon }) => (
-          <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-            <Icon size={20} aria-hidden />
-            <span>{t(key)}</span>
-          </NavLink>
-        ))}
-      </nav>
-      <main className="main">
-        <Outlet />
-      </main>
-    </div>
-  );
+  return <div className="shell">
+    <nav className="nav" aria-label="Main">
+      <div className="brand">MEMO</div>
+      {items.map(({ to, key, icon: Icon }) => <NavLink key={to} to={to} end={to === '/'} className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+        <Icon size={20} aria-hidden /><span>{t(key)}</span>
+      </NavLink>)}
+    </nav>
+    <main className="main"><Outlet /></main>
+  </div>;
 }
