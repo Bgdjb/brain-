@@ -34,9 +34,10 @@ export function FocusPage() {
   }, [running, label, minutes]);
 
   const start = () => {
-    if (remaining <= 0) setRemaining(minutes * 60);
+    const seconds = remaining <= 0 ? minutes * 60 : remaining;
+    setRemaining(seconds);
     if (startedAt.current === null) startedAt.current = Date.now();
-    deadline.current = Date.now() + Math.max(1, remaining) * 1000;
+    deadline.current = Date.now() + seconds * 1000;
     setRunning(true);
   };
   const pause = () => {
