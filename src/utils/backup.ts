@@ -5,7 +5,8 @@ const bytesToBase64=(bytes:Uint8Array)=>btoa(Array.from(bytes).map(b=>String.fro
 const base64ToBytes=(value:string)=>Uint8Array.from(atob(value),c=>c.charCodeAt(0));
 async function collectBackup():Promise<BackupPayload>{const tables:Record<string,unknown[]>={};for(const table of db.tables)tables[table.name]=await table.toArray();return{app:'MEMO',version:1,createdAt:new Date().toISOString(),tables};}
 function downloadJson(value:unknown,name:string){const blob=new Blob([JSON.stringify(value,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
-function asArrayBuffer(bytes:Uint8Array):ArrayBuffer{const copy=new ArrayBuffer(bytes.byteLength);new Uint8Array(copy).set(bytes);return copy;}\nasync function deriveKey(password:string,salt:Uint8Array){const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:asArrayBuffer(salt),iterations:250000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
+function asArrayBuffer(bytes:Uint8Array):ArrayBuffer{const copy=new ArrayBuffer(bytes.byteLength);new Uint8Array(copy).set(bytes);return copy;}
+async function deriveKey(password:string,salt:Uint8Array){const material=await crypto.subtle.importKey('raw',new TextEncoder().encode(password),'PBKDF2',false,['deriveKey']);return crypto.subtle.deriveKey({name:'PBKDF2',salt:asArrayBuffer(salt),iterations:250000,hash:'SHA-256'},material,{name:'AES-GCM',length:256},false,['encrypt','decrypt']);}
 async function restorePayload(parsed:unknown){
  if(!parsed||typeof parsed!=='object')throw new Error('ملف النسخة غير صالح.');
  const payload=parsed as Partial<BackupPayload>;
