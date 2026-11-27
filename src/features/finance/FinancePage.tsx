@@ -1,0 +1,14 @@
+import { useMemo, useState, type FormEvent } from 'react';
+import { useLiveQuery } from 'dexie-react-hooks';
+import { db, type FinanceEntry } from '../../database/schema';
+const today=()=>new Date().toISOString().slice(0,10);
+export function FinancePage(){
+ const [type,setType]=useState<FinanceEntry['type']>('expense');const [title,setTitle]=useState('');const [category,setCategory]=useState('عام');const [amount,setAmount]=useState('');const [entryDate,setEntryDate]=useState(today());const [notes,setNotes]=useState('');
+ const entries=useLiveQuery(()=>db.finance.orderBy('entryDate').reverse().toArray(),[]);
+ const totals=useMemo(()=>({income:(entries??[]).filter(x=>x.type==='income').reduce((a,x)=>a+x.amount,0),expense:(entries??[]).filter(x=>x.type==='expense').reduce((a,x)=>a+x.amount,0)}),[entries]);
+ const add=async(e:FormEvent)=>{e.preventDefault();const n=Number(amount);if(title.trim().length<2||!Number.isFinite(n)||n<=0)return;const now=Date.now();await db.finance.add({type,title:title.trim(),category:category.trim()||'عام',amount:n,entryDate,notes:notes.trim(),createdAt:now,updatedAt:now});setTitle('');setAmount('');setNotes('');};
+ const money=(n:number)=>new Intl.NumberFormat('ar-EG',{maximumFractionDigits:2}).format(n)+' ج.م';
+ return <section className="stack"><h1>الميزانية</h1><div className="grid"><div className="card stat"><strong>{money(totals.income)}</strong><span>إجمالي الإيرادات</span></div><div className="card stat"><strong>{money(totals.expense)}</strong><span>إجمالي المصروفات</span></div><div className="card stat"><strong>{money(totals.income-totals.expense)}</strong><span>الرصيد</span></div></div>
+ <form className="card stack" onSubmit={add}><h2>إضافة حركة مالية</h2><div className="row"><button type="button" aria-pressed={type==='expense'} onClick={()=>setType('expense')}>مصروف</button><button type="button" aria-pressed={type==='income'} onClick={()=>setType('income')}>إيراد</button></div><label>البيان<input value={title} onChange={e=>setTitle(e.target.value)} required/></label><div className="grid"><label>المبلغ بالجنيه<input type="number" min="0.01" step="0.01" value={amount} onChange={e=>setAmount(e.target.value)} required/></label><label>التصنيف<input value={category} onChange={e=>setCategory(e.target.value)}/></label></div><label>التاريخ<input type="date" value={entryDate} onChange={e=>setEntryDate(e.target.value)}/></label><label>ملاحظات<textarea rows={2} value={notes} onChange={e=>setNotes(e.target.value)}/></label><button className="primary">حفظ الحركة</button></form>
+ <div className="stack">{entries?.map(x=><div className="card item" key={x.id}><div><strong>{x.title}</strong><div className="muted">{x.entryDate} · {x.category}</div></div><div className="row"><strong>{x.type==='income'?'+':'−'}{money(x.amount)}</strong><button className="danger" onClick={()=>{if(window.confirm('حذف الحركة؟'))void db.finance.delete(x.id!);}}>حذف</button></div></div>)}</div></section>;
+}
